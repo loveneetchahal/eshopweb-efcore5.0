@@ -24,6 +24,8 @@ namespace ApplicationCore.Services
             {
                 status = (int)DbReturnValue.CreateSuccess;
             }
+            //if user exists to do tripat
+           // status = (int)DbReturnValue.RecordExists
             return new DatabaseResponse { ResponseCode = status };
         }
 
@@ -54,9 +56,10 @@ namespace ApplicationCore.Services
 
             return new DatabaseResponse { ResponseCode = status,Results = user };
         }
-
-        public Task<DatabaseResponse> GetUsersAsync(int? RoleId)
+        //todo for tripat
+        public async Task<DatabaseResponse> GetUsersAsync(int? RoleId)
         {
+            var users = await _userRepository.ListAllAsync();
             throw new NotImplementedException();
         }
 
