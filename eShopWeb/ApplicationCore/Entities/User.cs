@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ApplicationCore.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace ApplicationCore.Entities
 {
-    public class User:BaseEntity
+    public class User:BaseEntity, IAggregateRoot
     {
         [StringLength(100)]
         public string FirstName { get; set; }
