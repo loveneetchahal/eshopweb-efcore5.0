@@ -5,6 +5,7 @@ using ApplicationCore.Enums;
 using ApplicationCore.Interfaces;
 using AutoMapper;
 using eShopWebApi.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -65,9 +66,9 @@ namespace eShopWebApi.Controllers
             {
                 return Ok(ApiResponse.ValidationErrorResponse(ModelState));
             }
-            var updateUser = _mapper.Map<User>(user);
+           // var updateUser = _mapper.Map<User>(user);
 
-            DatabaseResponse response = await _userService.UpdateUserAsync(updateUser,updateUser.Id);
+            DatabaseResponse response = await _userService.UpdateUserAsync(user, user.Id);
 
             if (response.ResponseCode == (int)DbReturnValue.UpdateSuccess)
             {
@@ -107,13 +108,13 @@ namespace eShopWebApi.Controllers
 
       //  [Authorize(Roles = "admin")]
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAsync(int? id)
+        public async Task<IActionResult> GetAsync(int? roleId)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(ApiResponse.ValidationErrorResponse(ModelState));
             }
-            DatabaseResponse response = await _userService.GetUsersAsync(id);
+            DatabaseResponse response = await _userService.GetUsersAsync(roleId);
 
             if (response.ResponseCode == (int)DbReturnValue.RecordExists)
             {
@@ -148,18 +149,18 @@ namespace eShopWebApi.Controllers
             }
 
         }
-      //  [AllowAnonymous]
-        //[HttpPost("authenticate")]
-        //public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel model)
-        //{
-        //    var user = await _userService.AuthenticateAsync(model.Username, Cryptography.Encrypt(model.Password));
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel model)
+        {
+            var user = await _userService.AuthenticateAsync(model.Username, Cryptography.Encrypt(model.Password));
 
-        //    if (user == null)
-        //        return BadRequest(new { message = "Username or password is incorrect" });
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
 
-        //    return Ok(user);
-        //}
-     //   [HttpPut("changepassword")]
+            return Ok(user);
+        }
+        //   [HttpPut("changepassword")]
         //public async Task<IActionResult> ChangePasswordAsync([FromBody] UserPasswordDto user)
         //{
         //    if (!ModelState.IsValid)
@@ -188,7 +189,7 @@ namespace eShopWebApi.Controllers
 
         //}
 
-       // [AllowAnonymous]
+        // [AllowAnonymous]
         //[HttpPost("ForgotPassword")]
         //public async Task<IActionResult> ForgotPassword([FromBody] string email)
         //{
@@ -239,7 +240,7 @@ namespace eShopWebApi.Controllers
         /// </summary>
         /// <param name="resetPassword"></param>
         /// <returns></returns>
-      //  [AllowAnonymous]
+        //  [AllowAnonymous]
         //[HttpPut("ResetPassword")]
         //public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
         //{
@@ -331,7 +332,7 @@ namespace eShopWebApi.Controllers
         //}
         #endregion
 
-     //   [AllowAnonymous]
+        //   [AllowAnonymous]
         //[HttpPost("ConfirmVerifyToken")]
         //public async Task<IActionResult> ConfirmVerificationToken([FromBody] string token)
         //{

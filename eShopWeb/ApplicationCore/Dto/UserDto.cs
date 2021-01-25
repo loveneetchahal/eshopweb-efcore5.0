@@ -92,7 +92,7 @@ namespace ApplicationCore.Dto
         public int UserStatus { get; set; }
         public int ModifiedBy { get; set; }
         public int? PlanId { get; set; }
-        public int UserId { get; set; }
+        public int Id { get; set; }
     }
     public class UserPasswordDto
     {

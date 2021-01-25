@@ -10,14 +10,14 @@ namespace ApplicationCore.Interfaces
     public interface IUserService
     {
         Task<DatabaseResponse> CreateUserAsync(User user);
-        Task<DatabaseResponse> UpdateUserAsync(User user,int userId);
+        Task<DatabaseResponse> UpdateUserAsync(UserUpdateDto user,int userId);
         Task<DatabaseResponse> GetUserByIdAsync(int userId);
         Task<DatabaseResponse> GetUsersAsync(int? RoleId);
         Task<DatabaseResponse> DeleteUserAsync(int userId);
         Task<DatabaseResponse> ForgotPasswordAsync();
        // Task<DatabaseResponse> ChangePasswordAsync(UserPasswordDto user);
        // Task<DatabaseResponse> ResetPasswordAsync(ResetPasswordDto user);
-     //   Task<UserDto> AuthenticateAsync(string username, string password);
+        Task<UserDto> AuthenticateAsync(string username, string password);
        // Task<DatabaseResponse> CheckValidUserAsync(string email);
         //Task CreateVerificationTokenAsync(VerificationTokenDto verifyRequest);
 

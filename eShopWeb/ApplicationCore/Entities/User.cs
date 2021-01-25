@@ -34,6 +34,7 @@ namespace ApplicationCore.Entities
         public DateTime ModifiedDate { get; set; }
         public int ModifiedBy { get; set; }
         public List<UserRole> UserRoles { get; set; }
+        public int RoleId { get; set; }
 
     }
 }
