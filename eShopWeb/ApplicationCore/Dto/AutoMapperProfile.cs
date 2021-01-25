@@ -18,6 +18,10 @@ namespace ApplicationCore.Dto
             CreateMap<UserDto, User>();
             CreateMap<CategoryCreateDto, Category>();
             CreateMap<CategoryUpdateDto, Category>();
+            CreateMap<ProductUpdateDto, Product>()
+            .ForMember(product => product.Id, opt => opt.MapFrom(src => src.ProductId));
+            CreateMap<ProductCreateDto, Product>();
+            CreateMap<ProductImagesDto, ProductImage>();
         }
     }
 }

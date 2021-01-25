@@ -86,5 +86,19 @@ namespace Infrastructure.Data
             var evaluator = new SpecificationEvaluator<T>();
             return evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
         }
+
+        public async Task<int> DeleteAllAsync(List<int> ids, CancellationToken cancellationToken = default)
+        {
+            _dbContext.Set<T>().RemoveRange(_dbContext.Set<T>().Where(r => ids.Contains(r.Id)));
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> AddAllAsync(List<T> entity, CancellationToken cancellationToken = default)
+        {
+             _dbContext.Set<T>().AddRange(entity);
+             return   await _dbContext.SaveChangesAsync(cancellationToken);
+
+        }
     }
 }
+    

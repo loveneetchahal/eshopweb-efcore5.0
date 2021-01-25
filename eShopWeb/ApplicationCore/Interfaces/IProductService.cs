@@ -9,7 +9,7 @@ namespace ApplicationCore.Interfaces
 {
    public interface IProductService
     {
-       // Task<DatabaseResponse> CreateProductsAsync(List<ProductCreateDto> products);
+        Task<DatabaseResponse> CreateProductsAsync(List<Product> products);
         Task<DatabaseResponse> CreateProductAsync(Product product);
         Task<DatabaseResponse> UpdateProductAsync(Product product);
         Task<DatabaseResponse> DeleteProductAsync(string productIds);

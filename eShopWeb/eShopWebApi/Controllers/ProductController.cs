@@ -53,28 +53,28 @@ namespace eShopWebApi.Controllers
         }
 
         //[Authorize(Roles = "admin,vendor")]
-        //[HttpPost("BulkInsert")]
-        //public async Task<IActionResult> PostBulkProductsAsync([FromBody] List<ProductCreateDto> products)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Ok(ApiResponse.ValidationErrorResponse(ModelState));
-        //    }
+        [HttpPost("BulkInsert")]
+        public async Task<IActionResult> PostBulkProductsAsync([FromBody] List<ProductCreateDto> products)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(ApiResponse.ValidationErrorResponse(ModelState));
+            }
+            var addToProducts = _mapper.Map<List<Product>>(products);
+            DatabaseResponse response = await _productService.CreateProductsAsync(addToProducts);
 
-        //    DatabaseResponse response = await _productService.CreateProductsAsync(products);
+            if (response.ResponseCode == (int)DbReturnValue.CreateSuccess)
+            {
+                return Ok(ApiResponse.OkResult(true, response.Results, DbReturnValue.CreateSuccess));
+            }
+            else
+            {
+                return Ok(ApiResponse.OkResult(false, response.Results, DbReturnValue.RecordExists));
+            }
 
-        //    if (response.ResponseCode == (int)DbReturnValue.CreateSuccess)
-        //    {
-        //        return Ok(ApiResponse.OkResult(true, response.Results, DbReturnValue.CreateSuccess));
-        //    }
-        //    else
-        //    {
-        //        return Ok(ApiResponse.OkResult(false, response.Results, DbReturnValue.RecordExists));
-        //    }
+        }
 
-        //}
-
-       // [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpPut]
         public async Task<IActionResult> PutAsync([FromBody] ProductUpdateDto product)
         {
@@ -208,37 +208,37 @@ namespace eShopWebApi.Controllers
         }
 
         //[Authorize(Roles = "admin")]
-        //[HttpDelete]
-        //public async Task<IActionResult> Delete(string ids)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Ok(ApiResponse.ValidationErrorResponse(ModelState));
-        //    }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string ids)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(ApiResponse.ValidationErrorResponse(ModelState));
+            }
 
-        //    DatabaseResponse response = await _productService.DeleteProductAsync(ids);
+            DatabaseResponse response = await _productService.DeleteProductAsync(ids);
 
-        //    if (response.ResponseCode == (int)DbReturnValue.DeleteSuccess)
-        //    {
-        //        List<ProductImagesDto> images = (List<ProductImagesDto>)response.Results;
-        //        string[] values = ids.Split(',');
-        //        for (int i = 0; i < values.Length; i++)
-        //        {
-        //            values[i] = values[i].Trim();
-        //            await CleanUpFiles("products", images);
-        //        }
-        //        return Ok(ApiResponse.OkResult(true, null, DbReturnValue.DeleteSuccess));
-        //    }
-        //    else if (response.ResponseCode == (int)DbReturnValue.ActiveTryDelete)
-        //    {
-        //        return Ok(ApiResponse.OkResult(true, null, DbReturnValue.ActiveTryDelete));
-        //    }
-        //    else
-        //    {
-        //        return Ok(ApiResponse.OkResult(true, null, DbReturnValue.NotExists));
-        //    }
+            if (response.ResponseCode == (int)DbReturnValue.DeleteSuccess)
+            {
+                //List<ProductImagesDto> images = (List<ProductImagesDto>)response.Results;
+                //string[] values = ids.Split(',');
+                //for (int i = 0; i < values.Length; i++)
+                //{
+                //    values[i] = values[i].Trim();
+                //    await CleanUpFiles("products", images);
+                //}
+                return Ok(ApiResponse.OkResult(true, null, DbReturnValue.DeleteSuccess));
+            }
+            else if (response.ResponseCode == (int)DbReturnValue.ActiveTryDelete)
+            {
+                return Ok(ApiResponse.OkResult(true, null, DbReturnValue.ActiveTryDelete));
+            }
+            else
+            {
+                return Ok(ApiResponse.OkResult(true, null, DbReturnValue.NotExists));
+            }
 
-        //}
+        }
         //private async Task<bool> CleanUpFiles(string type, List<ProductImagesDto> imagesDto)
         //{
         //    AWSS3Config aWSS3Config = new AWSS3Config();
